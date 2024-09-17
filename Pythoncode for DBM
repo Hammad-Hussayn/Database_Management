@@ -1,1 +1,45 @@
-hi guys please make your code in this file 
+#make sure you open Visual Studio Code via the Anaconda Navigator 
+#If you didn’t already, first install the module 
+pip install psycopg2
+
+#import the modules psycopg2 and pandas 
+import psycopg2 
+import pandas as pd
+
+
+#Connect to your own database and change the parentheses 
+conn = psycopg2.connect(
+    host="localhost",
+    database="postgres",
+    user="postgres",
+    password="YOURPASSWORD")
+
+#Query for Q1 
+query = """
+SELECT 
+    EXTRACT(MONTH FROM (f.release_date::date)) AS release_month,
+    AVG(b.domestic_box_office) AS avg_domestic_box_office
+FROM 
+    film1 f
+JOIN 
+    boxoffice b
+ON 
+    f.film_id = b.film_id
+WHERE 
+    f.release_date IS NOT NULL
+    AND b.domestic_box_office IS NOT NULL
+GROUP BY 
+    release_month
+ORDER BY 
+    avg_domestic_box_office DESC;
+"""
+
+# Execute the query and fetch the data
+df = pd.read_sql_query(query, conn)
+
+# Close the connection
+conn.close()
+
+# Print results
+print(df)
+
