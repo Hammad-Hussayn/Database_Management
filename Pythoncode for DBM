@@ -6,16 +6,19 @@ pip install psycopg2
 import psycopg2 
 import pandas as pd
 
-
-#Connect to your own database and change the parentheses 
+# 1. Connect to the database
 conn = psycopg2.connect(
     host="localhost",
-    database="postgres",
-    user="postgres",
-    password="YOURPASSWORD")
+    database="postgres",  # Replace with your actual database name
+    user="postgres",      # Replace with your actual username
+    password="your_password"  # Replace with your actual password
+)
 
-#Query for Q1 
-query = """
+# 2. Create a cursor
+cur = conn.cursor()
+
+# 3. Define and execute the SELECT statement
+sql = """
 SELECT 
     EXTRACT(MONTH FROM (f.release_date::date)) AS release_month,
     AVG(b.domestic_box_office) AS avg_domestic_box_office
@@ -33,13 +36,13 @@ GROUP BY
 ORDER BY 
     avg_domestic_box_office DESC;
 """
+cur.execute(sql)
 
-# Execute the query and fetch the data
-df = pd.read_sql_query(query, conn)
+# 4. Fetch the results
+rows = cur.fetchall()
+for row in rows:
+    print(row)
 
-# Close the connection
+# 5. Close the cursor and connection
+cur.close()
 conn.close()
-
-# Print results
-print(df)
-
