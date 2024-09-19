@@ -1,43 +1,25 @@
 #Query 1 importation of tables in the data summary 
-
 Movie table 
-
 CREATE TABLE movie ( 
-
     movie_id INTEGER PRIMARY KEY, 
-
     release_date TEXT, 
-
     genre TEXT 
-
 ); 
 
 Review table 
-
 CREATE TABLE review ( 
-
     review_id VARCHAR PRIMARY KEY, 
-
     metascore INTEGER, 
-
     userscore INTEGER, 
-
     rating TEXT 
-
 ); 
 
 Boxoffice table 
-
 CREATE TABLE boxoffice ( 
-
     boxoffice_id SERIAL PRIMARY KEY, 
-
     domestic_box_office INTEGER, 
-
     opening_weekend INTEGER, 
-
     title VARCHAR 
-
 );
 
 
@@ -114,9 +96,9 @@ CREATE TABLE boxoffice_review (
 
 );
 
+# Query 6:  
 #Task 1: we will be answering research questions 1
-#Which release months generate the highest average domestic box office revenue? 
-
+#Which release months generate the highest average domestic box office revenue?
 SELECT  
     CASE  
         -- February: February 7 to February 14 
@@ -137,3 +119,27 @@ GROUP BY
     season 
 ORDER BY  
     average_domestic_box_office DESC;
+
+# Query 7:  
+# Task 1:is used to answer the research question number 2:
+ 
+SELECT  
+    CASE  
+        -- Valentine's Day: February 7 to February 14 
+        WHEN m.months = 2 AND m.days BETWEEN 7 AND 14 THEN 'Valentines Day' 
+        -- Halloween: October 25 to October 31 
+        WHEN m.months = 10 AND m.days BETWEEN 25 AND 31 THEN 'Halloween' 
+        -- Christmas: December 21 to December 30 
+        WHEN m.months = 12 AND m.days BETWEEN 21 AND 30 THEN 'Christmas' 
+        -- Non-peak season: Any other day 
+        ELSE 'Non-Peak Season' 
+    END AS season, 
+    AVG(b.opening_weekend) AS average_opening_weekend 
+FROM  
+    boxoffice b 
+JOIN  
+    movie m ON b.movie_id = m.movie_id 
+GROUP BY  
+    season 
+ORDER BY  
+    average_opening_weekend DESC;
