@@ -70,3 +70,27 @@ UPDATE movie
 SET months = SPLIT_PART(release_date, ' ', 1), 
 
     days = CAST(SPLIT_PART(release_date, ' ', 2) AS INTEGER);
+
+
+# Query 4
+Q1: 
+ALTER TABLE movie 
+ADD COLUMN months_integer INTEGER; 
+
+Q2: 
+UPDATE movie 
+SET months_integer = CASE  
+    WHEN months = 'January' THEN 1 
+    WHEN months = 'February' THEN 2 
+    WHEN months = 'March' THEN 3 
+    WHEN months = 'April' THEN 4 
+    WHEN months = 'May' THEN 5 
+    WHEN months = 'June' THEN 6 
+    WHEN months = 'July' THEN 7 
+    WHEN months = 'August' THEN 8 
+    WHEN months = 'September' THEN 9 
+    WHEN months = 'October' THEN 10 
+    WHEN months = 'November' THEN 11 
+    WHEN months = 'December' THEN 12 
+    ELSE NULL 
+END;
