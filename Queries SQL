@@ -39,3 +39,19 @@ CREATE TABLE boxoffice (
     title VARCHAR 
 
 );
+
+
+#Query 2: create the foreign key to show the relationship between the tables 
+#boxoffice table  
+
+ALTER TABLE boxoffice 
+ADD CONSTRAINT fk_movie_id 
+FOREIGN KEY (movie_id)  
+REFERENCES movie(movie_id); 
+
+#Review table 
+
+ALTER TABLE review 
+ADD CONSTRAINT fk_review_id 
+FOREIGN KEY (review_id)  
+REFERENCES movie(review_id);
