@@ -1,0 +1,84 @@
+Souleiman:
+
+Query 1 importation of tables in the data summary 
+
+Movie table 
+CREATE TABLE movie ( 
+    movie_id INTEGER PRIMARY KEY, 
+    release_date TEXT, 
+    genre TEXT 
+); 
+
+Review table 
+CREATE TABLE review ( 
+    review_id VARCHAR PRIMARY KEY, 
+    metascore INTEGER, 
+    userscore INTEGER, 
+    rating TEXT 
+); 
+
+Boxoffice table 
+CREATE TABLE boxoffice ( 
+    boxoffice_id SERIAL PRIMARY KEY, 
+    domestic_box_office INTEGER, 
+    opening_weekend INTEGER, 
+    title VARCHAR 
+);
+
+
+Hammad:
+Query 2: create the foreign key to show the relationship between the tables
+
+boxoffice table  
+
+ALTER TABLE boxoffice 
+ADD CONSTRAINT fk_movie_id 
+FOREIGN KEY (movie_id)  
+REFERENCES movie(movie_id); 
+
+Review table 
+ALTER TABLE review 
+ADD CONSTRAINT fk_review_id 
+FOREIGN KEY (review_id)  
+REFERENCES movie(review_id);
+
+
+(Corina) 
+Query 3: 
+
+ALTER TABLE movie 
+ADD COLUMN months TEXT, 
+ADD COLUMN days INTEGER; 
+ 
+
+Task 2: we will be splitting the column release_dates to movie and days 
+
+UPDATE movie 
+SET months = SPLIT_PART(release_date, ' ', 1), 
+    days = CAST(SPLIT_PART(release_date, ' ', 2) AS INTEGER);
+
+
+Iyayi:
+Q1: 
+
+ALTER TABLE movie 
+ADD COLUMN months_integer INTEGER; 
+
+Q2: 
+
+UPDATE movie 
+SET months_integer = CASE  
+    WHEN months = 'January' THEN 1 
+    WHEN months = 'February' THEN 2 
+    WHEN months = 'March' THEN 3 
+    WHEN months = 'April' THEN 4 
+    WHEN months = 'May' THEN 5 
+    WHEN months = 'June' THEN 6 
+    WHEN months = 'July' THEN 7 
+    WHEN months = 'August' THEN 8 
+    WHEN months = 'September' THEN 9 
+    WHEN months = 'October' THEN 10 
+    WHEN months = 'November' THEN 11 
+    WHEN months = 'December' THEN 12 
+    ELSE NULL 
+END;
