@@ -143,3 +143,18 @@ GROUP BY
     season 
 ORDER BY  
     average_opening_weekend DESC;
+
+#QUERY 8
+#Task: we will be answering the research question number 3, by finding the correlation of userscore and the domestic box office 
+
+#What is the correlation between user reviews (userscore) and the domestic box office revenue for movies ? 
+
+ 
+
+SELECT corr(r.userscore, b.domestic_box_office) AS correlation 
+
+FROM boxoffice_review m 
+
+JOIN review r ON m.movie_id = r.movie_id 
+
+JOIN boxOffice b ON m.movie_id = b.movie_id;
