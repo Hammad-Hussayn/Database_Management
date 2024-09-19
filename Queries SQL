@@ -55,3 +55,18 @@ ALTER TABLE review
 ADD CONSTRAINT fk_review_id 
 FOREIGN KEY (review_id)  
 REFERENCES movie(review_id);
+
+
+#Query 3: 
+
+ALTER TABLE movie 
+ADD COLUMN months TEXT, 
+ADD COLUMN days INTEGER; 
+
+#we will be splitting the column release_dates to movie and days 
+
+UPDATE movie 
+
+SET months = SPLIT_PART(release_date, ' ', 1), 
+
+    days = CAST(SPLIT_PART(release_date, ' ', 2) AS INTEGER);
