@@ -1,48 +1,11 @@
-#make sure you open Visual Studio Code via the Anaconda Navigator 
-#If you didn’t already, first install the module 
-pip install psycopg2
-
-#import the modules psycopg2 and pandas 
+# Query 1:  
+#Task 1: Firstly we will be using the pip install for panda, psyopg2 and matplotlib for plots and statistical analysis.
+# Code: 
+pip install sqlalchemy psycopg2 pandas 
+pip install matplotlib 
+pip install scipy 
 import psycopg2 
-import pandas as pd
-
-# 1. Connect to the database
-conn = psycopg2.connect(
-    host="localhost",
-    database="postgres",  # Replace with your actual database name
-    user="postgres",      # Replace with your actual username
-    password="your_password"  # Replace with your actual password
-)
-
-# 2. Create a cursor
-cur = conn.cursor()
-
-# 3. Define and execute the SELECT statement
-sql = """
-SELECT 
-    EXTRACT(MONTH FROM (f.release_date::date)) AS release_month,
-    AVG(b.domestic_box_office) AS avg_domestic_box_office
-FROM 
-    film1 f
-JOIN 
-    boxoffice b
-ON 
-    f.film_id = b.film_id
-WHERE 
-    f.release_date IS NOT NULL
-    AND b.domestic_box_office IS NOT NULL
-GROUP BY 
-    release_month
-ORDER BY 
-    avg_domestic_box_office DESC;
-"""
-cur.execute(sql)
-
-# 4. Fetch the results
-rows = cur.fetchall()
-for row in rows:
-    print(row)
-
-# 5. Close the cursor and connection
-cur.close()
-conn.close()
+import pandas as pd 
+import numpy as np 
+from scipy.stats import pearsonr 
+import matplotlib.pyplot as plt
