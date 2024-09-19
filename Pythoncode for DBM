@@ -62,3 +62,108 @@ plt.ylabel('Average Domestic Box Office')
 plt.title('Average Domestic Box Office Revenue by Season') 
 plt.xticks(rotation=45)  # Rotate labels for readability 
 plt.show() 
+
+
+#Query 3:  
+
+#Tasks 1: will be answering research questions 2 finding which month has the highest opening weekend 
+
+Code: 
+
+import psycopg2 
+
+import pandas as pd 
+
+ 
+
+# Connect to your PostgreSQL database (adjust connection settings as needed) 
+
+conn = psycopg2.connect( 
+
+    host="localhost",         
+
+    database="postgres",       
+
+    user="postgres",          
+
+    password="12345"           
+
+) 
+
+# Query to calculate the average box office revenue grouped by months 
+
+query = """ 
+
+SELECT  
+
+    CASE  
+
+        -- Valentine's Day: February 7 to February 14 
+
+        WHEN m.months = 2 AND m.days BETWEEN 7 AND 14 THEN 'February' 
+
+        -- October: October 25 to October 31 
+
+        WHEN m.months = 10 AND m.days BETWEEN 25 AND 31 THEN 'October' 
+
+        -- December: December 21 to December 30 
+
+        WHEN m.months = 12 AND m.days BETWEEN 21 AND 30 THEN 'December' 
+
+        -- Non-peak season: Any other day 
+
+        ELSE 'Non-Peak Season' 
+
+    END AS season, 
+
+    AVG(b.opening_weekend) AS average_opening_weekend 
+
+FROM  
+
+    boxoffice b 
+
+JOIN  
+
+    movie m ON b.movie_id = m.movie_id 
+
+GROUP BY  
+
+    season 
+
+ORDER BY  
+
+    average_opening_weekend DESC; 
+
+ 
+
+""" 
+
+ 
+
+df = pd.read_sql(query, conn) 
+
+conn.close() 
+
+print(df) 
+
+ 
+
+import matplotlib.pyplot as plt 
+
+ 
+
+# Plot the data 
+
+plt.figure(figsize=(10, 6)) 
+
+plt.bar(df['season'], df['average_opening_weekend'], color='skyblue') 
+
+plt.xlabel('Season') 
+
+plt.ylabel('Average opening weekend') 
+
+plt.title('Average opening weekend Revenue by Season') 
+
+plt.xticks(rotation=45)  # Rotate labels for readability 
+
+plt.show()
