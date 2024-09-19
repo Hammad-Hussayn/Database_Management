@@ -1,0 +1,41 @@
+#Query 1 importation of tables in the data summary 
+
+Movie table 
+
+CREATE TABLE movie ( 
+
+    movie_id INTEGER PRIMARY KEY, 
+
+    release_date TEXT, 
+
+    genre TEXT 
+
+); 
+
+Review table 
+
+CREATE TABLE review ( 
+
+    review_id VARCHAR PRIMARY KEY, 
+
+    metascore INTEGER, 
+
+    userscore INTEGER, 
+
+    rating TEXT 
+
+); 
+
+Boxoffice table 
+
+CREATE TABLE boxoffice ( 
+
+    boxoffice_id SERIAL PRIMARY KEY, 
+
+    domestic_box_office INTEGER, 
+
+    opening_weekend INTEGER, 
+
+    title VARCHAR 
+
+);
