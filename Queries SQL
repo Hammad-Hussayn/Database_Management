@@ -94,3 +94,22 @@ SET months_integer = CASE
     WHEN months = 'December' THEN 12 
     ELSE NULL 
 END;
+
+#query 5
+CREATE TABLE boxoffice_review ( 
+
+    box_review_id SERIAL PRIMARY KEY, 
+
+    movie_id INTEGER, 
+
+    boxoffice_id INTEGER, 
+
+    review_id VARCHAR, 
+
+    FOREIGN KEY (movie_id) REFERENCES movie(movie_id), 
+
+    FOREIGN KEY (boxoffice_id) REFERENCES boxoffice(boxoffice_id), 
+
+    FOREIGN KEY (review_id) REFERENCES review(review_id) 
+
+);
