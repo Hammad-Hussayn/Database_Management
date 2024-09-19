@@ -167,3 +167,61 @@ plt.title('Average opening weekend Revenue by Season')
 plt.xticks(rotation=45)  # Rotate labels for readability 
 
 plt.show()
+
+
+# Query 4:  
+# Tasks 1: will be answering research questions 3 finding the correlation between userscore and box office 
+
+# Code: 
+pip install sqlalchemy psycopg2 pandas 
+pip install matplotlib 
+pip install scipy 
+import psycopg2 
+import pandas as pd 
+import numpy as np 
+from scipy.stats import pearsonr 
+import matplotlib.pyplot as plt 
+
+# Connect to your PostgreSQL database (adjust connection settings as needed) 
+conn = psycopg2.connect( 
+    host="localhost",          
+    database="postgres",       
+    user="postgres",           
+    password="12345"           
+) 
+
+# Query to retrieve user score and box office revenue for each movie 
+query = """ 
+SELECT  
+    r.userscore, 
+    b.domestic_box_office 
+FROM  
+    review r 
+JOIN  
+    boxoffice b ON r.movie_id = b.movie_id 
+WHERE  
+    r.userscore IS NOT NULL 
+    AND b.domestic_box_office IS NOT NULL; 
+""" 
+
+# Load the data into a pandas DataFrame 
+df = pd.read_sql(query, conn) 
+# Close the database connection 
+conn.close() 
+ 
+# Display the data 
+print(df) 
+
+# Calculate the correlation using Pearson's correlation coefficient 
+correlation, p_value = pearsonr(df['userscore'], df['domestic_box_office']) 
+print(f"Pearson Correlation Coefficient: {correlation}") 
+print(f"P-value: {p_value}") 
+
+# Plot the data to visualize the relationship between UserScore and Domestic Box Office 
+plt.figure(figsize=(10, 6)) 
+plt.scatter(df['userscore'], df['domestic_box_office'], color='blue') 
+plt.title('Correlation between userscore and Domestic Box Office') 
+plt.xlabel('userscore') 
+plt.ylabel('Domestic Box Office') 
+plt.grid(True) 
+plt.show()
