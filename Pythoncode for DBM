@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 
 #Query 2:  
 #Task 1: This query will be answering a research question 1 and displaying a plot.  
-
 #Code: 
 import psycopg2 
 import pandas as pd 
@@ -65,37 +64,22 @@ plt.show()
 
 
 #Query 3:  
-
 #Tasks 1: will be answering research questions 2 finding which month has the highest opening weekend 
-
-Code: 
+#Code: 
 
 import psycopg2 
-
 import pandas as pd 
-
- 
-
 # Connect to your PostgreSQL database (adjust connection settings as needed) 
 
 conn = psycopg2.connect( 
-
     host="localhost",         
-
     database="postgres",       
-
     user="postgres",          
-
     password="12345"           
-
 ) 
-
 # Query to calculate the average box office revenue grouped by months 
-
 query = """ 
-
 SELECT  
-
     CASE  
         -- Valentine's Day: February 7 to February 14 
         WHEN m.months = 2 AND m.days BETWEEN 7 AND 14 THEN 'February' 
@@ -115,9 +99,6 @@ GROUP BY
     season 
 ORDER BY  
     average_opening_weekend DESC; 
-
- 
-
 """ 
 df = pd.read_sql(query, conn) 
 conn.close() 
@@ -134,7 +115,6 @@ plt.show()
 
 # Query 4:  
 # Tasks 1: will be answering research questions 3 finding the correlation between userscore and box office 
-
 # Code: 
 pip install sqlalchemy psycopg2 pandas 
 pip install matplotlib 
@@ -188,3 +168,108 @@ plt.xlabel('userscore')
 plt.ylabel('Domestic Box Office') 
 plt.grid(True) 
 plt.show()
+
+#Query 5:
+#Tasks 1: will be answering research questions 4 finding the correlation between metascore and box office
+#Code:
+pip install sqlalchemy psycopg2 pandas
+pip install matplotlib
+pip install scipy
+
+import psycopg2
+import pandas as pd
+import numpy as np
+from scipy.stats import pearsonr
+import matplotlib.pyplot as plt
+
+conn = psycopg2.connect(
+    host="localhost",         
+    database="postgres",      
+    user="postgres",          
+    password="12345"          
+)
+
+# Query to retrieve user score and box office revenue for each movie
+query = """
+SELECT 
+    r.metascore,
+    b.domestic_box_office
+FROM 
+    review r
+JOIN 
+    boxoffice b ON r.movie_id = b.movie_id
+WHERE 
+    r.metascore IS NOT NULL
+    AND b.domestic_box_office IS NOT NULL;
+"""
+
+df = pd.read_sql(query, conn)
+conn.close()
+# Display the data
+print(df)
+# Calculate the correlation using Pearson's correlation coefficient
+correlation, p_value = pearsonr(df['metascore'], df['domestic_box_office'])
+
+print(f"Pearson Correlation Coefficient: {correlation}")
+print(f"P-value: {p_value}")
+
+# Plot the data to visualize the relationship between UserScore and Domestic Box Office
+plt.figure(figsize=(10, 6))
+plt.scatter(df['metascore'], df['domestic_box_office'], color='blue')
+plt.title('Correlation between metascore and Domestic Box Office')
+plt.xlabel('metascore')
+plt.ylabel('Domestic Box Office')
+plt.grid(True)
+plt.show()
+
+
+#Query 6:
+#Tasks 1: will be finding the regression analysis using python 
+#Code:
+import psycopg2
+import pandas as pd
+import statsmodels.api as sm
+
+# Connect to your PostgreSQL database (adjust connection settings as needed)
+conn = psycopg2.connect(
+    host="localhost",         # Replace with your actual host
+    database="postgres",      # Replace with your actual database name
+    user="postgres",          # Replace with your actual username
+    password="12345"          # Replace with your actual password
+)
+
+# Query to retrieve data for regression
+query = """
+SELECT 
+    CASE 
+        WHEN m.months= 2 AND m.days BETWEEN 7 AND 14 THEN 1
+        WHEN m.months= 10 AND m.days BETWEEN 25 AND 31 THEN 1
+        WHEN m.months= 12 AND m.days BETWEEN 21 AND 30 THEN 1
+        ELSE 0
+    END AS holiday_season,
+    b.domestic_box_office,
+    b.opening_weekend,
+    r.userscore,
+    r.metascore
+FROM 
+    movie m
+JOIN 
+    boxoffice b ON m.movie_id = b.movie_id
+JOIN 
+    review r ON m.movie_id = r.movie_id
+WHERE 
+    b.domestic_box_office IS NOT NULL
+    AND r.userscore IS NOT NULL
+    AND r.metascore IS NOT NULL;
+"""
+# Load the data into a pandas DataFrame
+df = pd.read_sql(query, conn)
+conn.close()
+X = df[['holiday_season', 'userscore', 'metascore']]  
+y = df['domestic_box_office']  # Dependent variable
+# Add a constant to the predictor variable for the intercept term
+X = sm.add_constant(X)
+# Fit the regression model
+model = sm.OLS(y, X).fit()
+# Print the summary of the regression
+print(model.summary())
