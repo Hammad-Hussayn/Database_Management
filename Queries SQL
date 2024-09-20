@@ -161,7 +161,7 @@ JOIN boxOffice b ON m.movie_id = b.movie_id;
 
 
 
-#QUERY 8 
+#QUERY 9
 #Task:  we will be  answering the research question number 4 by finding the correlation of metascore and the domestic box office 
 SELECT corr(r.metascore, b.domestic_box_office) AS correlation 
 FROM boxoffice_review m 
