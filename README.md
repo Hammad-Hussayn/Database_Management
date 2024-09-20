@@ -47,7 +47,7 @@ Conclusion: this diagram shows that December during the peak period of 21-30th g
 
 Moreover, we carried out a series of linear regression studies to explore the impact of holiday season releases, ratings from user reviews, and evaluations from experts on the domestic box office earnings. The factors that were considered independent were the date a movie was released (during the holiday season versus outside of it), ratings from viewers, and assessments from critics. The domestic box office earnings were the factor that was measured as dependent.
 
-5.1 Summary of Findings
+ Summary of Findings
 1.	Hypothesis 1 (H1): accepted. Movies released during the holiday season generated higher average box office revenue compared to those released in non-holiday periods.
 2.	Hypothesis 2 (H2): Partially accepted. Some holiday releases outperformed non-peak releases in terms of opening weekend performance, but others did not.
 3.	Hypothesis 3 (H3): Not accepted. There was no significant correlation between user review scores and box office revenue.
